@@ -1,0 +1,45 @@
+name: 'Corellium MATRIX'
+description: 'Automated mobile security testing and AppSec report generation, powered by Corellium virtual devices.'
+author: 'Corellium, Inc. <support@corellium.com>'
+branding:
+  color: 'gray-dark'
+  icon: 'smartphone'
+
+inputs:
+  server:
+    description: 'Specifies which Corellium server to use'
+    required: false
+    default: 'https://app.corellium.com'
+  deviceFlavor:
+    description: 'The flavor of the Instance that is being created'
+    required: false
+  deviceOS:
+    description: 'The software version'
+    required: false
+  appPath:
+    description: 'URL to download test app or local path of the app relative to the Github workspace'
+    required: false
+  userActions:
+    description: 'URL to download device input JSON file or local path of the JSON file relative to the Github workspace'
+    required: true
+  keywords:
+    description: 'URL to download wordlist txt file or local path of the txt file relative to the Github workspace'
+    required: false
+  deviceId:
+    description: 'The instance of the existing device in your Corellium project'
+    required: false
+  bundleId:
+    description: 'The application already installed on the app'
+    required: false
+  reportFormat:
+    description: 'This controls the format of the report output, it will default to JSON'
+    required: false
+    default: 'json'
+
+outputs:
+  report:
+    description: 'MATRIX report artifact download path'
+
+runs:
+  using: node20
+  main: dist/index.js
