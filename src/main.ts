@@ -101,14 +101,16 @@ async function getDeviceWifiIp(deviceId: string, token: string): Promise<string>
     throw new Error(`Failed to fetch WiFi IP: ${response.statusText} - ${errorText}`);
   }
 
-  const data = (await response.json()) as { wifiIp?: string };
-  const wifiIp = data?.wifiIp;
+  // Parse response as an array of objects
+  const data = (await response.json()) as { wifiIp?: string }[];
 
-  if (!wifiIp) {
+  // Ensure data is in expected format and has at least one entry
+  if (!data || !data.length || !data[0].wifiIp) {
     throw new Error('WiFi IP not found in response');
   }
 
-  return wifiIp;
+  // Return the WiFi IP from the first object in the array
+  return data[0].wifiIp;
 }
 
 function validateInputsAndEnv(): void {

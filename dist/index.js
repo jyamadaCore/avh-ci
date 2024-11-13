@@ -30232,12 +30232,14 @@ async function getDeviceWifiIp(deviceId, token) {
         const errorText = await response.text(); // Capture response text for better error reporting
         throw new Error(`Failed to fetch WiFi IP: ${response.statusText} - ${errorText}`);
     }
+    // Parse response as an array of objects
     const data = (await response.json());
-    const wifiIp = data?.wifiIp;
-    if (!wifiIp) {
+    // Ensure data is in expected format and has at least one entry
+    if (!data || !data.length || !data[0].wifiIp) {
         throw new Error('WiFi IP not found in response');
     }
-    return wifiIp;
+    // Return the WiFi IP from the first object in the array
+    return data[0].wifiIp;
 }
 function validateInputsAndEnv() {
     if (!process.env.CORELLIUM_API_TOKEN) {
