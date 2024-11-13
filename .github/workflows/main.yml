@@ -19,6 +19,8 @@ jobs:
           PROJECT: ${{ secrets.CORELLIUM_PROJECT }}
           CORELLIUM_API_TOKEN: ${{ secrets.CORELLIUM_API_TOKEN }}
           SERVER: ${{ secrets.CORELLIUM_SERVER }}
+          ACTIONS_STEP_DEBUG: true
+          ACTIONS_RUNNER_DEBUG: true
         with:
           deviceFlavor: 'rpi4b'
           deviceOS: 11.2.0
