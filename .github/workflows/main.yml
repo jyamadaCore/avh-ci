@@ -11,16 +11,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: npm install
-      - run: npm run package  # Run the package step to build the action
 
       - name: Run AVH
         id: corellium-avh
-        uses: ./dist  # Use the local dist folder, containing the bundled action
         env:
           PROJECT: ${{ secrets.CORELLIUM_PROJECT }}
           API_TOKEN: ${{ secrets.CORELLIUM_API_TOKEN }}
           SERVER: ${{ secrets.CORELLIUM_SERVER }}
         with:
           deviceFlavor: 'rpi4b'
-          deviceOS: '11.2.0'
+          deviceOS: 11.2.0
