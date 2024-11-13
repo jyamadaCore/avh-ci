@@ -30209,7 +30209,7 @@ async function delay(ms) {
 async function setupDevice() {
     const projectId = process.env.PROJECT;
     core.info('Creating device...');
-    const resp = await execCmd(`corellium instance create ${core.getInput('deviceFlavor')} ${core.getInput('deviceOS')} ${projectId}`);
+    const resp = await execCmd(`corellium instance create ${core.getInput('deviceFlavor')} ${core.getInput('deviceOS')} ${projectId} --name rbpi4-ci`);
     const deviceId = resp?.toString().trim();
     return { deviceId };
 }
