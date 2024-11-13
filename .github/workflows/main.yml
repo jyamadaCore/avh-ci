@@ -14,6 +14,7 @@ jobs:
 
       - name: Run AVH
         id: corellium-avh
+        uses: ./dist  # Use the local dist folder, containing the bundled action
         env:
           PROJECT: ${{ secrets.CORELLIUM_PROJECT }}
           API_TOKEN: ${{ secrets.CORELLIUM_API_TOKEN }}
