@@ -30167,8 +30167,6 @@ async function run() {
         await installCorelliumCli(); // Install the Corellium CLI
         const { deviceId } = await setupDevice(); // Create a device on Corellium
         await delay(120000); // Introduce a 5-second delay
-        const wifiIp = await getDeviceWifiIp(deviceId, token); // Retrieve the device's WiFi IP via API with token
-        core.info(`Device created with ID: ${deviceId} and WiFi IP: ${wifiIp}`);
     }
     catch (error) {
         core.setFailed(`An error occurred: ${error instanceof Error ? error.message : String(error)}`);
@@ -30213,34 +30211,6 @@ async function setupDevice() {
     const deviceId = resp?.toString().trim();
     return { deviceId };
 }
-async function getDeviceWifiIp(deviceId, token) {
-    core.info(`Fetching WiFi IP for device ID: ${deviceId} via API...`);
-    const endpoint = `${process.env.SERVER}/api/v1/instances`;
-    const params = new URLSearchParams({
-        name: core.getInput('deviceName'),
-        returnAttr: 'wifiIp',
-    });
-    const url = `${endpoint}?${params.toString()}`;
-    const response = await (0, node_fetch_1.default)(url, {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${token}`, // Use the token received from login
-        },
-    });
-    if (!response.ok) {
-        const errorText = await response.text(); // Capture response text for better error reporting
-        throw new Error(`Failed to fetch WiFi IP: ${response.statusText} - ${errorText}`);
-    }
-    // Parse response as an array of objects
-    const data = (await response.json());
-    // Ensure data is in expected format and has at least one entry
-    if (!data || !data.length || !data[0].wifiIp) {
-        throw new Error('WiFi IP not found in response');
-    }
-    // Return the WiFi IP from the first object in the array
-    return data[0].wifiIp;
-}
 function validateInputsAndEnv() {
     if (!process.env.CORELLIUM_API_TOKEN) {
         throw new Error('Environment secret missing: CORELLIUM_API_TOKEN');
@@ -30275,15 +30245,6 @@ async function execCmd(cmd) {
         throw new Error(`Error occurred executing ${cmd}! err=${err}`);
     }
     return resp;
-}
-function tryJsonParse(jsonStr) {
-    try {
-        return JSON.parse(jsonStr);
-    }
-    catch (err) {
-        core.warning('Failed to parse JSON response');
-        return undefined;
-    }
 }
 
 
