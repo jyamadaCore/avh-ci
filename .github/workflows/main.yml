@@ -3,7 +3,7 @@ name: Run Corellium Raspberry Pi Model
 on: [push]
 
 jobs:
-  cafe-ios:
+  rbpi-ci:
     runs-on: ubuntu-latest
 
     steps:
