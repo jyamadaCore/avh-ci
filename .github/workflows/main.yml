@@ -11,10 +11,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+      - run: npm install
+      - run: npm run package  # Run the package step to build the action
 
       - name: Run AVH
         id: corellium-avh
-        uses: jyamadaCore/avh-ci@v1.0.0
+        uses: ./dist  # Use the local dist folder, containing the bundled action
         env:
           PROJECT: ${{ secrets.CORELLIUM_PROJECT }}
           API_TOKEN: ${{ secrets.CORELLIUM_API_TOKEN }}
