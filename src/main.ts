@@ -23,7 +23,7 @@ export async function run(): Promise<void> {
 
 async function installCorelliumCli(): Promise<void> {
   core.info('Installing Corellium-CLI...');
-  await exec('npm install -g @corellium/corellium-cli@1.4.0');
+  await exec('npm install -g @corellium/corellium-cli@1.3.8');
   await execCmd(`corellium login --endpoint ${process.env.CORELLIUM_SERVER} --apitoken ${process.env.CORELLIUM_API_TOKEN}`);
 }
 
