@@ -1,0 +1,24 @@
+name: Run Corellium MATRIX solution
+
+on: [push]
+
+jobs:
+  cafe-ios:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run AVH
+        id: corellium-avh
+        uses: jyamadaCore/avh-ci@v1.0.0
+        env:
+          PROJECT: ${{ secrets.CORELLIUM_PROJECT }}
+          API_TOKEN: ${{ secrets.CORELLIUM_API_TOKEN }}
+          SERVER: ${{ secrets.CORELLIUM_PROJECT }}
+        with:
+          deviceFlavor: 'iphone15pm'
+          deviceOS: '17.5.1'
