@@ -30164,6 +30164,7 @@ async function run() {
         validateInputsAndEnv(); // Validate necessary environment variables and inputs
         const token = await loginToCorellium(); // Authenticate and get the bearer token
         core.info(`Successfully authenticated with Corellium`);
+        await installCorelliumCli(); // Install the Corellium CLI
         const { deviceId } = await setupDevice(); // Create a device on Corellium
         await delay(120000); // Introduce a 5-second delay
         const wifiIp = await getDeviceWifiIp(deviceId, token); // Retrieve the device's WiFi IP via API with token
@@ -30196,6 +30197,11 @@ async function loginToCorellium() {
         throw new Error('No token received from Corellium authentication');
     }
     return data.token; // Return the token for use in subsequent requests
+}
+async function installCorelliumCli() {
+    core.info('Installing Corellium-CLI...');
+    await (0, exec_1.exec)('npm install -g @corellium/corellium-cli@1.3.8');
+    await execCmd(`corellium login --endpoint ${process.env.SERVER} --apitoken ${process.env.CORELLIUM_API_TOKEN}`);
 }
 async function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
