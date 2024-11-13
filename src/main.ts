@@ -44,7 +44,7 @@ async function getDeviceWifiIp(deviceId: string): Promise<string> {
   // Dynamically import node-fetch for compatibility with CommonJS
   const fetch = (await import('node-fetch')).default;
 
-  const endpoint = 'https://jedi.app.avh.corellium.com/api/v1/instances';
+  const endpoint = `${process.env.CORELLIUM_SERVER}/api/v1/instances`;
   const params = new URLSearchParams({
     name: core.getInput('deviceName'), // Assuming device name is an input
     returnAttr: 'wifiIp',
