@@ -18,6 +18,7 @@ export async function run(): Promise<void> {
     await installCorelliumCli(); // Install the Corellium CLI
 
     const { deviceId } = await setupDevice(); // Create a device on Corellium
+    await delay(60000); // Introduce a 5-second delay
     const wifiIp = await getDeviceWifiIp(deviceId, token); // Retrieve the device's WiFi IP via API with token
 
     core.info(`Device created with ID: ${deviceId} and WiFi IP: ${wifiIp}`);
@@ -72,8 +73,6 @@ async function setupDevice(): Promise<{ deviceId: string }> {
   const resp = await execCmd(
     `corellium instance create ${core.getInput('deviceFlavor')} ${core.getInput('deviceOS')} ${projectId}`,
   );
-
-  await delay(60000); // Introduce a 5-second delay
   
   const deviceId = resp?.toString().trim();
   return { deviceId };
