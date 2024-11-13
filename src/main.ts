@@ -61,6 +61,10 @@ async function installCorelliumCli(): Promise<void> {
   await execCmd(`corellium login --endpoint ${process.env.SERVER} --apitoken ${process.env.CORELLIUM_API_TOKEN}`);
 }
 
+async function delay(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 async function setupDevice(): Promise<{ deviceId: string }> {
   const projectId = process.env.PROJECT;
 
@@ -68,6 +72,9 @@ async function setupDevice(): Promise<{ deviceId: string }> {
   const resp = await execCmd(
     `corellium instance create ${core.getInput('deviceFlavor')} ${core.getInput('deviceOS')} ${projectId}`,
   );
+
+  await delay(60000); // Introduce a 5-second delay
+  
   const deviceId = resp?.toString().trim();
   return { deviceId };
 }
