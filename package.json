@@ -1,16 +1,16 @@
 {
-  "name": "corellium-matrix-action",
-  "description": "This action runs the Corellium MATRIX solution",
+  "name": "corellium-avh-action",
+  "description": "This action runs the Corellium AVH solution",
   "version": "0.0.0",
   "author": "",
   "private": true,
-  "homepage": "https://github.com/corellium/matrix.git",
+  "homepage": "https://github.com/corellium/avh-ci.git",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/corellium/matrix.git"
+    "url": "git+https://github.com/corellium/avh-ci.git"
   },
   "bugs": {
-    "url": "https://github.com/corellium/matrix/issues"
+    "url": "https://github.com/corellium/avh-ci/issues"
   },
   "keywords": [
     "actions",
