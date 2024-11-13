@@ -9,8 +9,6 @@ export async function run(): Promise<void> {
   try {
     validateInputsAndEnv();
     await installCorelliumCli();
-    
-    const deviceId = core.getInput('deviceId');
   }
   catch (error) {
     core.setFailed(`An error occurred: ${error instanceof Error ? error.message : error}`);
@@ -20,8 +18,7 @@ export async function run(): Promise<void> {
 async function installCorelliumCli(): Promise<void> {
   core.info('Installing Corellium-CLI...');
   await exec('npm install -g @corellium/corellium-cli@1.4.0');
-  await execCmd(`corellium login --endpoint ${core.getInput('server')} --apitoken ${process.env.CORELLIUM_API_TOKEN
- }`);
+  await execCmd(`corellium login --endpoint ${process.env.CORELLIUM_SERVER} --apitoken ${process.env.CORELLIUM_API_TOKEN}`);
 }
 
 async function setupDevice(): Promise<{ deviceId: string }> {
