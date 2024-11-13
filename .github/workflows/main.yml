@@ -21,4 +21,4 @@ jobs:
           SERVER: ${{ secrets.CORELLIUM_SERVER }}
         with:
           deviceFlavor: 'rpi4b'
-          deviceOS: '11.2.0'
+          deviceOS: 11.2.0
