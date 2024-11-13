@@ -1,5 +1,6 @@
 import * as core from '@actions/core';
 import { exec } from '@actions/exec';
+import fetch from 'node-fetch';  // Use static import for compatibility
 
 /**
  * The main function for the GitHub Action.
@@ -10,15 +11,48 @@ import { exec } from '@actions/exec';
 export async function run(): Promise<void> {
   try {
     validateInputsAndEnv(); // Validate necessary environment variables and inputs
+    
+    const token = await loginToCorellium(); // Authenticate and get the bearer token
+    core.info(`Successfully authenticated with Corellium`);
+
     await installCorelliumCli(); // Install the Corellium CLI
 
     const { deviceId } = await setupDevice(); // Create a device on Corellium
-    const wifiIp = await getDeviceWifiIp(deviceId); // Retrieve the device's WiFi IP via API
+    const wifiIp = await getDeviceWifiIp(deviceId, token); // Retrieve the device's WiFi IP via API with token
 
     core.info(`Device created with ID: ${deviceId} and WiFi IP: ${wifiIp}`);
   } catch (error) {
     core.setFailed(`An error occurred: ${error instanceof Error ? error.message : String(error)}`);
   }
+}
+
+/**
+ * Function to authenticate with Corellium and retrieve a bearer token.
+ */
+async function loginToCorellium(): Promise<string> {
+  const url = 'https://jedi.app.avh.corellium.com/api/v1/auth/login';
+  const apiToken = process.env.CORELLIUM_API_TOKEN;
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${apiToken}`
+    },
+    body: JSON.stringify({ apiToken })
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to authenticate with Corellium: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  if (!data || !data.token) {
+    throw new Error('No token received from Corellium authentication');
+  }
+
+  return data.token;  // Return the token for use in subsequent requests
 }
 
 async function installCorelliumCli(): Promise<void> {
@@ -38,25 +72,21 @@ async function setupDevice(): Promise<{ deviceId: string }> {
   return { deviceId };
 }
 
-async function getDeviceWifiIp(deviceId: string): Promise<string> {
+async function getDeviceWifiIp(deviceId: string, token: string): Promise<string> {
   core.info(`Fetching WiFi IP for device ID: ${deviceId} via API...`);
-
-  // Dynamically import node-fetch for compatibility with CommonJS
-  const fetch = (await import('node-fetch')).default;
 
   const endpoint = `${process.env.SERVER}/api/v1/instances`;
   const params = new URLSearchParams({
-    name: core.getInput('deviceName'), // Assuming device name is an input
+    name: core.getInput('deviceName'),
     returnAttr: 'wifiIp',
   });
   const url = `${endpoint}?${params.toString()}`;
-  const apiToken = process.env.CORELLIUM_API_TOKEN;
 
   const response = await fetch(url, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
-      'Authorization': `Bearer ${apiToken}`,
+      'Authorization': `Bearer ${token}`,  // Use the token received from login
     },
   });
 
