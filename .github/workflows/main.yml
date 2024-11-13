@@ -14,7 +14,7 @@ jobs:
 
       - name: Run AVH
         id: corellium-avh
-        uses: ./
+        uses: jyamadaCore/avh-ci@v1.0.0
         env:
           PROJECT: ${{ secrets.CORELLIUM_PROJECT }}
           API_TOKEN: ${{ secrets.CORELLIUM_API_TOKEN }}
