@@ -30166,7 +30166,7 @@ async function run() {
         core.info(`Successfully authenticated with Corellium`);
         await installCorelliumCli(); // Install the Corellium CLI
         const { deviceId } = await setupDevice(); // Create a device on Corellium
-        await delay(60000); // Introduce a 5-second delay
+        await delay(120000); // Introduce a 5-second delay
         const wifiIp = await getDeviceWifiIp(deviceId, token); // Retrieve the device's WiFi IP via API with token
         core.info(`Device created with ID: ${deviceId} and WiFi IP: ${wifiIp}`);
     }
