@@ -30229,7 +30229,8 @@ async function getDeviceWifiIp(deviceId, token) {
         },
     });
     if (!response.ok) {
-        throw new Error(`Failed to fetch WiFi IP: ${response.statusText}`);
+        const errorText = await response.text(); // Capture response text for better error reporting
+        throw new Error(`Failed to fetch WiFi IP: ${response.statusText} - ${errorText}`);
     }
     const data = (await response.json());
     const wifiIp = data?.wifiIp;
