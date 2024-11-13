@@ -26200,7 +26200,6 @@ async function run() {
     try {
         validateInputsAndEnv();
         await installCorelliumCli();
-        const deviceId = core.getInput('deviceId');
     }
     catch (error) {
         core.setFailed(`An error occurred: ${error instanceof Error ? error.message : error}`);
@@ -26209,12 +26208,12 @@ async function run() {
 async function installCorelliumCli() {
     core.info('Installing Corellium-CLI...');
     await (0, exec_1.exec)('npm install -g @corellium/corellium-cli@1.4.0');
-    await execCmd(`corellium login --endpoint ${core.getInput('server')} --apitoken ${process.env.CORELLIUM_API_TOKEN}`);
+    await execCmd(`corellium login --endpoint ${process.env.CORELLIUM_SERVER} --apitoken ${process.env.CORELLIUM_API_TOKEN}`);
 }
 async function setupDevice() {
     const projectId = process.env.PROJECT;
     core.info('Creating device...');
-    const resp = await execCmd(`corellium instance create ${core.getInput('deviceFlavor')} ${core.getInput('deviceOS')} ${projectId} --wait`);
+    const resp = await execCmd(`corellium instance create ${core.getInput('deviceFlavor')} ${core.getInput('deviceOS')} ${projectId} --wait --name rbpi-ci`);
     const deviceId = resp?.toString().trim();
     return { deviceId };
 }
