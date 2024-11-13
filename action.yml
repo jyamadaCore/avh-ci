@@ -1,9 +1,6 @@
-name: 'Corellium MATRIX'
+name: 'Corellium AVH'
 description: 'Automated mobile security testing and AppSec report generation, powered by Corellium virtual devices.'
 author: 'Corellium, Inc. <support@corellium.com>'
-branding:
-  color: 'gray-dark'
-  icon: 'smartphone'
 
 inputs:
   server:
@@ -18,5 +15,5 @@ inputs:
     required: false
 
 runs:
-  using: node20
+  using: node22
   main: dist/index.js
