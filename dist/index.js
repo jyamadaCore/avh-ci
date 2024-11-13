@@ -26213,7 +26213,7 @@ async function run() {
 async function installCorelliumCli() {
     core.info('Installing Corellium-CLI...');
     await (0, exec_1.exec)('npm install -g @corellium/corellium-cli@1.3.8');
-    await execCmd(`corellium login --endpoint ${process.env.CORELLIUM_SERVER} --apitoken ${process.env.CORELLIUM_API_TOKEN}`);
+    await execCmd(`corellium login --endpoint ${process.env.SERVER} --apitoken ${process.env.CORELLIUM_API_TOKEN}`);
 }
 async function setupDevice() {
     const projectId = process.env.PROJECT;
@@ -26226,7 +26226,7 @@ async function getDeviceWifiIp(deviceId) {
     core.info(`Fetching WiFi IP for device ID: ${deviceId} via API...`);
     // Dynamically import node-fetch for compatibility with CommonJS
     const fetch = (await __nccwpck_require__.e(/* import() */ 48).then(__nccwpck_require__.bind(__nccwpck_require__, 6048))).default;
-    const endpoint = `${process.env.CORELLIUM_SERVER}/api/v1/instances`;
+    const endpoint = `${process.env.SERVER}/api/v1/instances`;
     const params = new URLSearchParams({
         name: core.getInput('deviceName'), // Assuming device name is an input
         returnAttr: 'wifiIp',

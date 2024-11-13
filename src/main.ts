@@ -24,7 +24,7 @@ export async function run(): Promise<void> {
 async function installCorelliumCli(): Promise<void> {
   core.info('Installing Corellium-CLI...');
   await exec('npm install -g @corellium/corellium-cli@1.3.8');
-  await execCmd(`corellium login --endpoint ${process.env.CORELLIUM_SERVER} --apitoken ${process.env.CORELLIUM_API_TOKEN}`);
+  await execCmd(`corellium login --endpoint ${process.env.SERVER} --apitoken ${process.env.CORELLIUM_API_TOKEN}`);
 }
 
 async function setupDevice(): Promise<{ deviceId: string }> {
@@ -44,7 +44,7 @@ async function getDeviceWifiIp(deviceId: string): Promise<string> {
   // Dynamically import node-fetch for compatibility with CommonJS
   const fetch = (await import('node-fetch')).default;
 
-  const endpoint = `${process.env.CORELLIUM_SERVER}/api/v1/instances`;
+  const endpoint = `${process.env.SERVER}/api/v1/instances`;
   const params = new URLSearchParams({
     name: core.getInput('deviceName'), // Assuming device name is an input
     returnAttr: 'wifiIp',
