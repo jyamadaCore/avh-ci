@@ -66,7 +66,7 @@ async function setupDevice(): Promise<{ deviceId: string }> {
 
   core.info('Creating device...');
   const resp = await execCmd(
-    `corellium instance create ${core.getInput('deviceFlavor')} ${core.getInput('deviceOS')} ${projectId} --wait`,
+    `corellium instance create ${core.getInput('deviceFlavor')} ${core.getInput('deviceOS')} ${projectId}`,
   );
   const deviceId = resp?.toString().trim();
   return { deviceId };

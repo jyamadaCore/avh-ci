@@ -30205,7 +30205,7 @@ async function installCorelliumCli() {
 async function setupDevice() {
     const projectId = process.env.PROJECT;
     core.info('Creating device...');
-    const resp = await execCmd(`corellium instance create ${core.getInput('deviceFlavor')} ${core.getInput('deviceOS')} ${projectId} --wait`);
+    const resp = await execCmd(`corellium instance create ${core.getInput('deviceFlavor')} ${core.getInput('deviceOS')} ${projectId}`);
     const deviceId = resp?.toString().trim();
     return { deviceId };
 }
