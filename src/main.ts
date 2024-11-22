@@ -22,7 +22,7 @@ export async function run(): Promise<void> {
 /**
  * Function to authenticate with Corellium.
  */
-async function loginToCorellium(): Promise<string> {
+export async function loginToCorellium(): Promise<string> {
   const domain = process.env.CORELLIUM_SERVER
   const url = `${domain}/v1/auth/login`;
   const apiToken = process.env.CORELLIUM_API_TOKEN;
@@ -52,7 +52,7 @@ async function loginToCorellium(): Promise<string> {
 /**
  * Function to create a device on Corellium via API using node-fetch.
  */
-async function setupDevice(token: string): Promise<{ deviceId: string }> {
+export async function setupDevice(token: string): Promise<{ deviceId: string }> {
   const domain = process.env.CORELLIUM_SERVER
   const url = `${domain}/v1/instances`;
   const postData = {
@@ -60,7 +60,6 @@ async function setupDevice(token: string): Promise<{ deviceId: string }> {
     name: core.getInput('deviceName'),
     flavor: core.getInput('deviceFlavor'),
     os: core.getInput('deviceOS'),
-    fwpackage: "https://firmwares-us-east-1-avh-s3-arm-com.s3.amazonaws.com/dummy-image-ae096d74-a6cd-47f1-a9c3-cdb7d127cf80"
   };
 
   const response = await fetch(url, {
@@ -85,11 +84,11 @@ async function setupDevice(token: string): Promise<{ deviceId: string }> {
   return { deviceId: data.id }; // Return the device ID for further processing
 }
 
-async function delay(ms: number): Promise<void> {
+export async function delay(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function validateInputsAndEnv(): void {
+export function validateInputsAndEnv(): void {
   if (!process.env.CORELLIUM_API_TOKEN || !process.env.PROJECT) {
     throw new Error('Missing environment secrets');
   }

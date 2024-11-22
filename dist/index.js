@@ -28919,6 +28919,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = run;
+exports.loginToCorellium = loginToCorellium;
+exports.setupDevice = setupDevice;
+exports.delay = delay;
+exports.validateInputsAndEnv = validateInputsAndEnv;
 const core = __importStar(__nccwpck_require__(9935));
 const node_fetch_1 = __importDefault(__nccwpck_require__(4060));
 /**
@@ -28972,7 +28976,6 @@ async function setupDevice(token) {
         name: core.getInput('deviceName'),
         flavor: core.getInput('deviceFlavor'),
         os: core.getInput('deviceOS'),
-        fwpackage: "https://firmwares-us-east-1-avh-s3-arm-com.s3.amazonaws.com/dummy-image-ae096d74-a6cd-47f1-a9c3-cdb7d127cf80"
     };
     const response = await (0, node_fetch_1.default)(url, {
         method: 'POST',
