@@ -28921,8 +28921,6 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = run;
 const core = __importStar(__nccwpck_require__(9935));
 const node_fetch_1 = __importDefault(__nccwpck_require__(4060));
-const https = __importStar(__nccwpck_require__(5687));
-const buffer_1 = __nccwpck_require__(4300);
 /**
  * The main function for the GitHub Action.
  */
@@ -28942,7 +28940,8 @@ async function run() {
  * Function to authenticate with Corellium.
  */
 async function loginToCorellium() {
-    const url = 'https://jedi.app.avh.corellium.com/api/v1/auth/login';
+    const domain = process.env.CORELLIUM_SERVER;
+    const url = `${domain}/v1/auth/login`;
     const apiToken = process.env.CORELLIUM_API_TOKEN;
     const response = await (0, node_fetch_1.default)(url, {
         method: 'POST',
@@ -28963,49 +28962,35 @@ async function loginToCorellium() {
     return data.token;
 }
 /**
- * Function to create a device on Corellium via API.
+ * Function to create a device on Corellium via API using node-fetch.
  */
 async function setupDevice(token) {
-    const postData = JSON.stringify({
+    const domain = process.env.CORELLIUM_SERVER;
+    const url = `${domain}/v1/instances`;
+    const postData = {
         project: process.env.PROJECT,
         name: core.getInput('deviceName'),
         flavor: core.getInput('deviceFlavor'),
         os: core.getInput('deviceOS'),
         fwpackage: "https://firmwares-us-east-1-avh-s3-arm-com.s3.amazonaws.com/dummy-image-ae096d74-a6cd-47f1-a9c3-cdb7d127cf80"
-    });
-    const options = {
-        hostname: 'jedi.app.avh.corellium.com',
-        path: '/api/v1/instances',
+    };
+    const response = await (0, node_fetch_1.default)(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Authorization': `Bearer ${token}`
-        }
-    };
-    return new Promise((resolve, reject) => {
-        const req = https.request(options, (res) => {
-            const chunks = []; // Explicit type for 'chunks'
-            res.on('data', (chunk) => {
-                chunks.push(chunk);
-            });
-            res.on('end', () => {
-                const body = buffer_1.Buffer.concat(chunks).toString();
-                const response = JSON.parse(body);
-                if (response.id) {
-                    resolve({ deviceId: response.id });
-                }
-                else {
-                    reject(new Error('Failed to create device'));
-                }
-            });
-        });
-        req.on('error', (error) => {
-            reject(error);
-        });
-        req.write(postData);
-        req.end();
+        },
+        body: JSON.stringify(postData)
     });
+    if (!response.ok) {
+        throw new Error(`Failed to create device: ${response.statusText}`);
+    }
+    const data = await response.json();
+    if (!data || !data.id) {
+        throw new Error('Failed to retrieve device ID from Corellium');
+    }
+    return { deviceId: data.id }; // Return the device ID for further processing
 }
 async function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
