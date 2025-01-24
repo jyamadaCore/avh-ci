@@ -19,7 +19,7 @@ jobs:
         run: npm install -g @corellium/corellium-cli
       
       - name: Login to Corellium
-        run: corellium login --apitoken ${{ secrets.CORELLIUM_API_TOKEN }} --endpoint https://app.corellium.com
+        run: corellium login --apitoken ${{ secrets.CORELLIUM_API_TOKEN }} --endpoint ${{ secrets.CORELLIUM_SERVER }}
       
       - name: Create device
         # The `true` argument will wait for the device to be ready before continuing, which is useful for CI.
