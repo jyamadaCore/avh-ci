@@ -6,7 +6,7 @@ inputs:
   server:
     description: 'Specifies which Corellium server to use'
     required: false
-    default: ''
+    default: 'https://jytesting.corellium.io'
   deviceFlavor:
     description: 'The flavor of the Instance that is being created'
     required: false
