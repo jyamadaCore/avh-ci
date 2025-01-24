@@ -27,10 +27,3 @@ jobs:
         run: |
           id=$(corellium instance create imx93 2.1.0 ${{ secrets.CORELLIUM_PROJECT }} true)
           echo "instanceId=$id" >> $GITHUB_ENV
-
-      - name: Stop device
-        # The `true` argument will wait for the device to be fully stopped before continuing, which is useful for CI.
-        run: corellium instance stop ${{ env.instanceId }} true
-
-      - name: Delete device
-        run: corellium instance delete ${{ env.instanceId }}
