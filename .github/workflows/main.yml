@@ -25,5 +25,5 @@ jobs:
         # The `true` argument will wait for the device to be ready before continuing, which is useful for CI.
         # We'll store the device ID in an environment variable so we can use it later.
         run: |
-          id=$(corellium instance create imx93 2.1.0 ${{ secrets.CORELLIUM_PROJECT }} true)
+          id=$(corellium instance create imx93 2.1.0 ${{ secrets.CORELLIUM_PROJECT }} Github-imx93)
           echo "instanceId=$id" >> $GITHUB_ENV
