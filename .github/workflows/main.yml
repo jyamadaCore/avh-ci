@@ -1,25 +1,36 @@
-name: Run Corellium Atlas
+name: Corellium
 
 on: [push]
 
 jobs:
-  rbpi-ci:
+  corellium:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+      
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      - name: Run AVH
-        id: corellium-avh
-        uses: jyamadaCore/avh-ci@v0.1
-        env:
-          PROJECT: ${{ secrets.CORELLIUM_PROJECT }}
-          CORELLIUM_API_TOKEN: ${{ secrets.CORELLIUM_API_TOKEN }}
-          SERVER: ${{ secrets.CORELLIUM_SERVER }}
+      - name: Install Node
+        uses: actions/setup-node@v3
         with:
-          deviceFlavor: 'imx93'
-          deviceOS: 2.1.0
-          deviceName: 'i.MX93'
+          node-version: 16
+
+      - name: Install Corellium CLI
+        run: npm install -g @corellium/corellium-cli
+      
+      - name: Login to Corellium
+        run: corellium login --apitoken ${{ secrets.CORELLIUM_API_TOKEN }} --endpoint https://app.corellium.com
+      
+      - name: Create device
+        # The `true` argument will wait for the device to be ready before continuing, which is useful for CI.
+        # We'll store the device ID in an environment variable so we can use it later.
+        run: |
+          id=$(corellium instance create imx93 2.1.0 ${{ secrets.CORELLIUM_PROJECT }} true)
+          echo "instanceId=$id" >> $GITHUB_ENV
+
+      - name: Stop device
+        # The `true` argument will wait for the device to be fully stopped before continuing, which is useful for CI.
+        run: corellium instance stop ${{ env.instanceId }} true
+
+      - name: Delete device
+        run: corellium instance delete ${{ env.instanceId }}
