@@ -1,4 +1,4 @@
-name: Run Corellium Raspberry Pi Model
+name: Run Corellium Atlas
 
 on: [push]
 
