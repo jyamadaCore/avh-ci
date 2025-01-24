@@ -1,5 +1,5 @@
 name: 'Corellium AVH'
-description: 'Automated mobile security testing and AppSec report generation, powered by Corellium virtual devices.'
+description: 'Automated Atlas device creation.'
 author: 'Corellium, Inc. <support@corellium.com>'
 
 inputs:
